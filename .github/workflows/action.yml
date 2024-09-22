@@ -1,0 +1,45 @@
+name: Run Scripts
+
+on:
+  workflow_dispatch:
+  schedule:
+      - cron: '30 19 * * *'
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+
+      - name: Clone repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: 
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/ruffalolavoisier/auto-tool-script.git
+       
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # 원하는 Python 버전
+
+      - name: Set GitHub Configuration
+        run: |
+          git config --global user.email "RuffaloLavoisier@gmail.com"
+          git config --global user.name "Ruffalo Lavoisier"
+
+      - name: Install PyGithub
+        run: |
+          pip install PyGithub
+
+      - name: Run shell script
+        run: |
+          chmod +x ./auto-tool-script/test_gb.sh
+          ./auto-tool-script/test_gb.sh
+
+      - name: Run Python script
+        run: |
+          python3 ./auto-tool-script/execute.py
