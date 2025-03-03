@@ -38,8 +38,8 @@ jobs:
       - name: Run shell script
         run: |
           chmod +x ./auto-tool-script/test_gb.sh
-          ./auto-tool-script/test_gb.sh
+          ./auto-tool-script/test_gb.sh NationalSecurityAgency ghidra github.com
 
       - name: Run Python script
         run: |
-          python3 ./auto-tool-script/execute.py
+          python3 ./auto-tool-script/execute.py ${{ github.event.repository.name }}
